@@ -1,0 +1,50 @@
+#### Essentials: Prefix, Mouse & Reloading ####
+set -g mouse on
+unbind C-b
+set-option -g prefix C-a
+bind-key C-a send-prefix
+bind r source-file ~/.tmux.conf \; display-message "Config reloaded!"
+
+#### Pane Splitting Shortcuts ####
+bind | split-window -h
+bind - split-window -v
+unbind '"'
+unbind %
+# Copy-mode enhancements (assumes xclip; adjust as needed)
+unbind -n -Tcopy-mode-vi MouseDragEnd1Pane
+bind -Tcopy-mode-vi MouseDragEnd1Pane send -X copy-selection-and-cancel\; run "tmux save-buffer - | xclip -i -sel clipboard"
+unbind-key MouseDown2Pane
+bind-key -n MouseDown2Pane run "X=$(xclip -o -sel clipboard); tmux set-buffer \"$X\"; tmux paste-buffer -p; tmux display-message 'pasted!'"
+
+#### Plugin List ####
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'christoomey/vim-tmux-navigator'
+set -g @plugin 'nhdaly/tmux-better-mouse-mode'
+set -g @plugin 'olimorris/tmux-pomodoro'
+set -g @plugin 'scroll_copy_mode'
+set -g @plugin 'tmux-plugins/tmux-copycat'
+set -g @plugin 'tmux-plugins/tmux-yank'
+set -g @plugin 'jaclu/tmux-menus'
+set -g @plugin 'sainhe/tmux-fzf'
+set -g @plugin 'tmux-plugins/tmux-sidebar'
+# Avoid duplicate 'tmux-yank'
+#set -g @plugin 'Nybkox/tmux-kanagawa'
+set -g @plugin 'dracula/tmux'
+#set -g @dracula-synchronize-panes-label "Sync"
+# Add to ~/.tmux.conf for immediate dark background:
+set -g default-terminal "screen-256color"
+set -g status-style bg=colour235,fg=colour255
+set -g pane-border-style fg=colour240
+set -g pane-active-border-style fg=colour39
+#set -g window-status-current-style bg=colour39,fg=colour235
+
+#### Initialize TPM (required, keep last in plugin section) ####
+run -b '~/.tmux/plugins/tpm/tpm'
+
+#### Kanagawa Theme Configuration (customize your flavor) ####
+# Choose one of: 'wave' (default), 'lotus', or 'dragon'
+#set -g @kanagawa-theme 'lotus'
+# Preserve your terminal's existing background/foreground if desired:
+#set -g @kanagawa-ignore-window-colors true
+
+
